@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace NumbersInWords
@@ -10,19 +11,44 @@ namespace NumbersInWords
     {
       var sut = new NumToWord();
 
-      var actual = sut.ToSingleWord(1);
+      var actual = sut.ToWord(1);
       
       Assert.Equal("one", actual);
     }
     
     [Fact]
-    public void two_digit_is_transformed_in_words()
+    public void twelve_is_transformed_in_words()
     {
       var sut = new NumToWord();
 
-      var actual = sut.ToSingleWord(12);
+      var actual = sut.ToWord(12);
       
       Assert.Equal("twelve", actual);
+    }
+
+    [Fact]
+    public void all_dozens_are_transformed_in_words()
+    {
+      var sut = new NumToWord();
+      var actual = new List<string>();
+      var expected = new List<string>()
+      {
+        "ten",
+        "twenty",
+        "thirty",
+        "forty",
+        "fifty",
+        "sixty",
+        "seventy",
+        "eighty",
+        "ninety",
+        "one hundred"
+      };      
+      var dozens = Enumerable.Range(10, 100).Where(x => x % 10 == 0).ToList();
+
+      dozens.ForEach(d=> actual.Add(sut.ToWord(d)));
+      
+      Assert.Equal(expected, actual);
     }
   }
 
@@ -50,11 +76,16 @@ namespace NumbersInWords
       {18, "eighteen"},
       {19, "nineteen"},
       {20, "twenty"},
+      {30, "thirty"},
+      {40, "forty"},
+      {50, "fifty"},
+      {60, "sixty"},
+      {70, "seventy"},
+      {80, "eighty"},
+      {90, "ninety"},
+      {100, "one hundred"},
     };
     
-    public string ToSingleWord(int number)
-    {
-      return _numberMap[number];
-    }
+    public string ToWord(int number) => _numberMap[number];
   }
 }
