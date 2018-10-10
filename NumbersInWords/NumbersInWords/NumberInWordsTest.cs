@@ -53,6 +53,14 @@ namespace NumbersInWords
       
       Assert.Equal("fifty one", actual);
     }
+    
+    [Fact]
+    public void number_132_is_parsed_correctly_in_words()
+    {
+      var actual = ToWord(132);
+      
+      Assert.Equal("one hundred thirty two", actual);
+    }
   }
 
   public static class NumToWord
@@ -97,7 +105,7 @@ namespace NumbersInWords
 
     private static string Destruct(int number)
     {
-      var numberString = number.ToString().ToArray();
+      var numberString = number.ToString().ToArray(); 
 
       if (numberString.Length == 1)
       {
@@ -108,6 +116,16 @@ namespace NumbersInWords
       {
         var unit = int.Parse(numberString[1].ToString());
         return NumberMap[number - unit]  +  " " +
+               NumberMap[unit];
+      }
+      
+      if (numberString.Length == 3)
+      {
+        var unit = int.Parse(numberString[2].ToString());
+        var dec = int.Parse(numberString[1]+"0");
+        var cent = int.Parse(numberString[0].ToString());
+
+        return NumberMap[cent] + " hundred " + NumberMap[dec]  +  " " +
                NumberMap[unit];
       }
 
