@@ -37,10 +37,9 @@ namespace NumbersInWords
         "sixty",
         "seventy",
         "eighty",
-        "ninety",
-        "one hundred"
+        "ninety"
       };      
-      var dozens = Enumerable.Range(10, 100).Where(x => x % 10 == 0).ToList();
+      var dozens = Enumerable.Range(10, 90).Where(x => x % 10 == 0).ToList();
 
       dozens.ForEach(d=> actual.Add(ToWord(d)));
       
@@ -86,13 +85,33 @@ namespace NumbersInWords
       {60, "sixty"},
       {70, "seventy"},
       {80, "eighty"},
-      {90, "ninety"},
-      {100, "one hundred"},
+      {90, "ninety"}
     };
     
     public static string ToWord(int number)
     {
-      return NumberMap[number];
+      if(NumberMap.TryGetValue(number, out _))
+        return NumberMap[number];
+      return Destruct(number);
+    }
+
+    private static string Destruct(int number)
+    {
+      var numberString = number.ToString().ToArray();
+
+      if (numberString.Length == 1)
+      {
+        return NumberMap[int.Parse(numberString[0].ToString())];
+      }
+
+      if (numberString.Length == 2)
+      {
+        var unit = int.Parse(numberString[1].ToString());
+        return NumberMap[number - unit]  +  " " +
+               NumberMap[unit];
+      }
+
+      throw new System.NotImplementedException();
     }
   }
 }
