@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
+using static NumbersInWords.NumToWord; 
 
 namespace NumbersInWords
 {
@@ -9,9 +10,7 @@ namespace NumbersInWords
     [Fact]
     public void single_number_is_transformed_in_word()
     {
-      var sut = new NumToWord();
-
-      var actual = sut.ToWord(1);
+      var actual = ToWord(1);
       
       Assert.Equal("one", actual);
     }
@@ -19,9 +18,7 @@ namespace NumbersInWords
     [Fact]
     public void twelve_is_transformed_in_words()
     {
-      var sut = new NumToWord();
-
-      var actual = sut.ToWord(12);
+      var actual = ToWord(12);
       
       Assert.Equal("twelve", actual);
     }
@@ -29,7 +26,6 @@ namespace NumbersInWords
     [Fact]
     public void all_dozens_are_transformed_in_words()
     {
-      var sut = new NumToWord();
       var actual = new List<string>();
       var expected = new List<string>()
       {
@@ -46,15 +42,23 @@ namespace NumbersInWords
       };      
       var dozens = Enumerable.Range(10, 100).Where(x => x % 10 == 0).ToList();
 
-      dozens.ForEach(d=> actual.Add(sut.ToWord(d)));
+      dozens.ForEach(d=> actual.Add(ToWord(d)));
       
       Assert.Equal(expected, actual);
     }
+
+    [Fact]
+    public void number_51_is_parsed_correctly_in_words()
+    {
+      var actual = ToWord(51);
+      
+      Assert.Equal("fifty one", actual);
+    }
   }
 
-  public class NumToWord
+  public static class NumToWord
   {
-    readonly Dictionary<int,string> _numberMap = new Dictionary<int, string>()
+    static readonly Dictionary<int,string> NumberMap = new Dictionary<int, string>()
     {
       {1, "one"},
       {2, "two"},
@@ -86,6 +90,9 @@ namespace NumbersInWords
       {100, "one hundred"},
     };
     
-    public string ToWord(int number) => _numberMap[number];
+    public static string ToWord(int number)
+    {
+      return NumberMap[number];
+    }
   }
 }
