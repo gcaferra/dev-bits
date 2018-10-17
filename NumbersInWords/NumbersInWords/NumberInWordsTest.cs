@@ -61,5 +61,13 @@ namespace NumbersInWords
       
       Assert.Equal("one hundred thirty two", actual);
     }
+    
+    [Fact]
+    public void number_999_is_parsed_correctly_in_words()
+    {
+      var actual = ToWord(999);
+      
+      Assert.Equal("nine hundred ninety nine", actual);
+    }
   }
 }

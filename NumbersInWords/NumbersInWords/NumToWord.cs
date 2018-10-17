@@ -49,27 +49,33 @@ namespace NumbersInWords
 
       if (numberString.Length == 1)
       {
-        return NumberMap[int.Parse(numberString[0].ToString())];
+        return Digit(int.Parse(numberString[0].ToString()));
       }
 
       if (numberString.Length == 2)
       {
-        var unit = int.Parse(numberString[1].ToString());
-        return NumberMap[number - unit]  +  " " +
-               NumberMap[unit];
+        return Dozens(number, numberString[1].ToString());
       }
       
       if (numberString.Length == 3)
       {
-        var unit = int.Parse(numberString[2].ToString());
-        var dec = int.Parse(numberString[1]+"0");
         var cent = int.Parse(numberString[0].ToString());
-
-        return NumberMap[cent] + " hundred " + NumberMap[dec]  +  " " +
-               NumberMap[unit];
+        var result = int.Parse(number.ToString().Substring(1, numberString.Length -1));
+        return NumberMap[cent] + " hundred " + Dozens(result, result.ToString()[1].ToString());
       }
 
       throw new System.NotImplementedException();
+    }
+
+    private static string Dozens(int number, string numberString)
+    {
+      var unit = int.Parse(numberString);
+      return NumberMap[number - unit] + " " + Digit(unit);
+    }
+
+    private static string Digit(int number)
+    {
+      return NumberMap[number];
     }
   }
 }
