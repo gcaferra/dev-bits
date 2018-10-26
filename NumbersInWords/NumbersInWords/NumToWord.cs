@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 
 namespace NumbersInWords
 {
@@ -40,42 +39,23 @@ namespace NumbersInWords
     {
       if(NumberMap.TryGetValue(number, out _))
         return NumberMap[number];
-      return Destruct(number);
+      return number.ToString().Centuries();
     }
 
-    private static string Destruct(int number)
-    {
-      var numberString = number.ToString().ToArray(); 
-
-      if (number < 10)
-      {
-        return Digit(numberString[0].ToString());
-      }
-
-      if (number < 100)
-      {
-        return Dozens(number.ToString());
-      }
-      
-      if (number < 1000)
-      {
-        return Centuries(number.ToString());
-      }
-
-      throw new System.NotImplementedException();
-    }
-
-    private static string Dozens(string number)
+    private static string Dozens(this string number)
     {
       var unit = number[1].ToString();
-      return NumberMap[int.Parse(number)- int.Parse(unit)] + " " + Digit(unit);
+      return NumberMap[int.Parse(number) - int.Parse(unit)] + " " + Digit(unit);
     }
 
-    private static string Centuries(string number)
+    private static string Centuries(this string number)
     {
-      var cent = int.Parse(number[0].ToString());
-      var dozens = int.Parse(number.Substring(1, number.Length -1));
-      return NumberMap[cent] + " hundred " + Dozens(dozens.ToString());
+      if (number.Length < 3)
+      {
+        return number.Dozens();
+      }
+
+      return NumberMap[int.Parse(number[0].ToString())] + " hundred " +  number.Substring(1, number.Length -1).Dozens();
     }
     
     private static string Digit(string number)
