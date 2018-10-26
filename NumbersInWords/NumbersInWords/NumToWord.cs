@@ -47,35 +47,40 @@ namespace NumbersInWords
     {
       var numberString = number.ToString().ToArray(); 
 
-      if (numberString.Length == 1)
+      if (number < 10)
       {
-        return Digit(int.Parse(numberString[0].ToString()));
+        return Digit(numberString[0].ToString());
       }
 
-      if (numberString.Length == 2)
+      if (number < 100)
       {
-        return Dozens(number, numberString[1].ToString());
+        return Dozens(number.ToString());
       }
       
-      if (numberString.Length == 3)
+      if (number < 1000)
       {
-        var cent = int.Parse(numberString[0].ToString());
-        var result = int.Parse(number.ToString().Substring(1, numberString.Length -1));
-        return NumberMap[cent] + " hundred " + Dozens(result, result.ToString()[1].ToString());
+        return Centuries(number.ToString());
       }
 
       throw new System.NotImplementedException();
     }
 
-    private static string Dozens(int number, string numberString)
+    private static string Dozens(string number)
     {
-      var unit = int.Parse(numberString);
-      return NumberMap[number - unit] + " " + Digit(unit);
+      var unit = number[1].ToString();
+      return NumberMap[int.Parse(number)- int.Parse(unit)] + " " + Digit(unit);
     }
 
-    private static string Digit(int number)
+    private static string Centuries(string number)
     {
-      return NumberMap[number];
+      var cent = int.Parse(number[0].ToString());
+      var dozens = int.Parse(number.Substring(1, number.Length -1));
+      return NumberMap[cent] + " hundred " + Dozens(dozens.ToString());
+    }
+    
+    private static string Digit(string number)
+    {
+      return NumberMap[int.Parse(number)];
     }
   }
 }
